@@ -358,6 +358,30 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path:'/mms',
+    component: Layout,
+    redirect: '/mms/member',
+    name: 'mms',
+    meta: {title: '会员', icon: 'ums-resource'},
+    children: [
+      {
+        path: 'member',
+        name: 'member',
+        component: () => import('@/views/mms/member/index'),
+        meta: {title: '会员列表', icon: 'ums-resource'}
+      },
+      {
+        path: 'memberDetail',
+        name: 'memberDetail',
+        component: () => import('@/views/mms/member/memberDetail'),
+        meta: {title: '会员详情'},
+        hidden:true
+      },
+     
+      
+    ]
+  },
   {path: '*', redirect: '/404', hidden: true}
 ]
 
