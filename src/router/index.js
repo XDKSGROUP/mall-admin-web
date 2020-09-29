@@ -287,7 +287,29 @@ export const asyncRouterMap = [
         component: () => import('@/views/sms/advertise/update'),
         meta: {title: '编辑广告'},
         hidden:true
+      },
+      {
+        path: 'news',
+        name: 'news',
+        component: () => import('@/views/sms/news/index'),
+        meta: {title: '咨询列表', icon: 'sms-flash'}
+      },
+      {
+        path: 'addNews',
+        name: 'addNews',
+        component: () => import('@/views/sms/news/add'),
+        meta: {title: '添加咨询'},
+        hidden:true
+      },
+      {
+        path: 'updateNews',
+        name: 'updateNews',
+        component: () => import('@/views/sms/news/update'),
+        meta: {title: '编辑咨询'},
+        hidden:true
       }
+
+
     ]
   },
   {
@@ -378,7 +400,14 @@ export const asyncRouterMap = [
         meta: {title: '会员详情'},
         hidden:true
       },
-     
+      {
+        path: 'memberTradingAddress',
+        name: 'memberTradingAddress',
+        component: () => import('@/views/mms/member/memberTradingAddress'),
+        meta: {title: '交易地址列表', icon: 'product-list'}
+      },
+
+
       
     ]
   },

@@ -27,7 +27,15 @@ export function exportExcel(params) {
 
 export function getMemberDetail(id) {
     return request({
-      url:'/umsMember/list/'+id,
-      method:'get'
+        url: '/umsMember/list/' + id,
+        method: 'get'
     });
-  }
+}
+
+export function updateStatus( params) {
+    return request({
+        url: '/umsMember/updateStatus/',
+        method: 'post',
+        params: params
+    })
+}
