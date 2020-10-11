@@ -406,9 +406,51 @@ export const asyncRouterMap = [
         component: () => import('@/views/mms/member/memberTradingAddress'),
         meta: {title: '交易地址列表', icon: 'product-list'}
       },
-
-
-      
+    ]
+  },
+  {
+    path:'/bms',
+    component: Layout,
+    redirect: '/bms/wallet',
+    name: 'bms',
+    meta: {title: '钱包', icon: 'ums-resource'},
+    children: [
+      {
+        path: 'wallet',
+        name: 'wallet',
+        component: () => import('@/views/bms/wallet/index'),
+        meta: {title: '交易记录1', icon: 'ums-resource'}
+      },
+      {
+        path: 'transactionLog',
+        name: 'transactionLog',
+        component: () => import('@/views/bms/wallet/transactionLog'),
+        meta: {title: '交易记录', icon: 'ums-resource'}
+      },
+      {
+        path: 'rechargeDetail',
+        name: 'rechargeDetail',
+        component: () => import('@/views/bms/wallet/rechargeDetail'),
+        meta: {title: '充值明细', icon: 'ums-resource'}
+      },
+      {
+        path: 'husdtChangeHistory',
+        name: 'husdtChangeHistory',
+        component: () => import('@/views/bms/wallet/husdtChangeHistory'),
+        meta: {title: 'usdt变动记录', icon: 'ums-resource'}
+      },
+      {
+        path: 'hotToken',
+        name: 'hotToken',
+        component: () => import('@/views/bms/wallet/hotToken'),
+        meta: {title: '热门代币', icon: 'ums-resource'}
+      },
+      {
+        path: 'ticketLog',
+        name: 'ticketLog',
+        component: () => import('@/views/bms/wallet/ticketLog'),
+        meta: {title: '抢券记录', icon: 'ums-resource'}
+      }
     ]
   },
   {path: '*', redirect: '/404', hidden: true}

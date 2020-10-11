@@ -13,13 +13,20 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="币种：">
-            <el-input v-model="listQuery.currency" class="input-width" placeholder="币种" clearable></el-input>
-          </el-form-item>
+         
           <el-form-item label="账号ID：">
             <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
-          
+           <el-form-item label="状态：">
+            <el-select v-model="listQuery.status" class="input-width" placeholder="全部" clearable>
+              <el-option
+                v-for="item in statusOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
        
         </el-form>
@@ -31,7 +38,7 @@
       
     </el-card>
     <div class="table-container">
-      <el-table ref="memberTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
+      <el-table ref="bmsTransactionLogTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
@@ -39,28 +46,33 @@
         <el-table-column label="帐号ID" align="center">
           <template slot-scope="scope">{{scope.row.memberId}}</template>
         </el-table-column>
-        <el-table-column label="币种" align="center">
-          <template slot-scope="scope">{{scope.row.currency}}</template>
+        <el-table-column label="发送地址" align="center">
+          <template slot-scope="scope">{{scope.row.fromAddress}}</template>
         </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tradingAddress}}</template>
+       
+        <el-table-column label="交易数量" align="center">
+          <template slot-scope="scope">{{scope.row.number}}</template>
         </el-table-column>
-        <el-table-column label="代币" align="center">
-          <template slot-scope="scope">{{scope.row.tokenCurrency}}</template>
+        <el-table-column label="接收地址" align="center">
+          <template slot-scope="scope">{{scope.row.toAddress}}</template>
         </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tokenTradingAddress}}</template>
+        <el-table-column label="状态" width="120" align="center">
+          <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
         </el-table-column>
-
+ <el-table-column label="代币地址" align="center">
+          <template slot-scope="scope">{{scope.row.tokenAddress}}</template>
+        </el-table-column>
+        <el-table-column label="矿工费" align="center">
+          <template slot-scope="scope">{{scope.row.fee}}</template>
+        </el-table-column>
+<el-table-column label="交易哈希" align="center">
+          <template slot-scope="scope">{{scope.row.txHash}}</template>
+        </el-table-column>
         <el-table-column label="添加时间" width="160" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
         </el-table-column>
        
-        <el-table-column label="操作" width="180" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">查看</el-button>
-          </template>
-        </el-table-column>
+        
       </el-table>
     </div>
     <div class="pagination-container">
@@ -80,7 +92,7 @@
 <script>
 import {
   fetchList,
-} from "@/api/memberTradingAddress";
+} from "@/api/bmsTransactionLog";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
@@ -88,7 +100,7 @@ const defaultListQuery = {
   pageSize: 10,
   keyword: null,
 };
-const defaultMember = {
+const defaultTransactionLog = {
   id: null,
   // username: null,
   // password: null,
@@ -98,7 +110,7 @@ const defaultMember = {
   // status: 1,
 };
 export default {
-  name: "memberList",
+  name: "TransactionLog",
   data() {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -106,8 +118,22 @@ export default {
       total: null,
       listLoading: false,
       dialogVisible: false,
-      member: Object.assign({}, defaultMember),
+      transactionLog: Object.assign({}, defaultTransactionLog),
       isEdit: false,
+      statusOptions: [
+        {
+          label: "正在打包",
+          value: 0,
+        },
+        {
+          label: "成功",
+          value: 1,
+        },
+        {
+          label: "失败",
+          value: 2,
+        },
+      ],
     };
   },
   created() {
@@ -121,6 +147,15 @@ export default {
       let date = new Date(time);
       return formatDate(date, "yyyy-MM-dd hh:mm:ss");
     },
+    formatStatus(value) {
+        if (value === 0) {
+          return '正在打包';
+        } else if (value === 1) {
+          return '成功';
+        } else if (value === 2) {
+          return '失败';
+        }
+      },
   },
   methods: {
     handleResetSearch() {
@@ -138,9 +173,6 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageNum = val;
       this.getList();
-    },
-    lookDetail(index, row) {
-      this.$router.push({ path: "/mms/memberDetail", query: { id: row.id } });
     },
     getList() {
       this.listLoading = true;
