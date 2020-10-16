@@ -13,15 +13,9 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="币种：">
-            <el-input v-model="listQuery.currency" class="input-width" placeholder="币种" clearable></el-input>
-          </el-form-item>
           <el-form-item label="账号ID：">
             <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
-          
-
-       
         </el-form>
       </div>
     </el-card>
@@ -39,28 +33,31 @@
         <el-table-column label="帐号ID" align="center">
           <template slot-scope="scope">{{scope.row.memberId}}</template>
         </el-table-column>
-        <el-table-column label="币种" align="center">
-          <template slot-scope="scope">{{scope.row.currency}}</template>
-        </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tradingAddress}}</template>
-        </el-table-column>
-        <el-table-column label="代币" align="center">
-          <template slot-scope="scope">{{scope.row.tokenCurrency}}</template>
-        </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tokenTradingAddress}}</template>
-        </el-table-column>
-
         <el-table-column label="添加时间" width="160" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
         </el-table-column>
-       
-        <el-table-column label="操作" width="180" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">查看</el-button>
-          </template>
+        <el-table-column label="改变类型" align="center">
+          <template slot-scope="scope">{{scope.row.changeType | formatChangeType}}</template>
         </el-table-column>
+        <el-table-column label="变更前数量" align="center">
+          <template slot-scope="scope">{{scope.row.startNumber}}</template>
+        </el-table-column>
+        <el-table-column label="变更的数量" align="center">
+          <template slot-scope="scope">{{scope.row.changeCount}}</template>
+        </el-table-column>
+        <el-table-column label="变更后数量" align="center">
+          <template slot-scope="scope">{{scope.row.endNumber}}</template>
+        </el-table-column>
+        
+        <el-table-column label="来源" width="120" align="center">
+          <template slot-scope="scope">{{scope.row.sourceType | formatSourceType}}</template>
+        </el-table-column>
+        
+        <el-table-column label="操作人ID" align="center">
+          <template slot-scope="scope">{{scope.row.handlers}}</template>
+        </el-table-column>
+       
+        
       </el-table>
     </div>
     <div class="pagination-container">
@@ -80,7 +77,7 @@
 <script>
 import {
   fetchList,
-} from "@/api/memberTradingAddress";
+} from "@/api/bmsHusdtChangeHistory";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
@@ -121,6 +118,21 @@ export default {
       let date = new Date(time);
       return formatDate(date, "yyyy-MM-dd hh:mm:ss");
     },
+    formatChangeType(value) {
+        if (value === 0) {
+          return '增加';
+        } else if (value === 1) {
+          return '减少';
+        }
+      },formatSourceType(value) {
+        if (value === 2) {
+          return '充值';
+        } else if (value === 3) {
+          return '抢购入场券';
+        } else if (value === 4) {
+          return '后台充值';
+        }
+      },
   },
   methods: {
     handleResetSearch() {

@@ -13,9 +13,15 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+          <el-form-item label="币种：">
+            <el-input v-model="listQuery.currency" class="input-width" placeholder="币种" clearable></el-input>
+          </el-form-item>
           <el-form-item label="账号ID：">
             <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
+          
+
+       
         </el-form>
       </div>
     </el-card>
@@ -25,7 +31,7 @@
       
     </el-card>
     <div class="table-container">
-      <el-table ref="ticketTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
+      <el-table ref="memberTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
@@ -33,8 +39,27 @@
         <el-table-column label="帐号ID" align="center">
           <template slot-scope="scope">{{scope.row.memberId}}</template>
         </el-table-column>
+        <el-table-column label="币种" align="center">
+          <template slot-scope="scope">{{scope.row.currency}}</template>
+        </el-table-column>
+        <el-table-column label="交易地址" align="center">
+          <template slot-scope="scope">{{scope.row.tradingAddress}}</template>
+        </el-table-column>
+        <el-table-column label="代币" align="center">
+          <template slot-scope="scope">{{scope.row.tokenCurrency}}</template>
+        </el-table-column>
+        <el-table-column label="交易地址" align="center">
+          <template slot-scope="scope">{{scope.row.tokenTradingAddress}}</template>
+        </el-table-column>
+
         <el-table-column label="添加时间" width="160" align="center">
-          <template slot-scope="scope">{{scope.row.addtime | formatDateTime}}</template>
+          <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
+        </el-table-column>
+       
+        <el-table-column label="操作" width="180" align="center">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">查看</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -55,7 +80,7 @@
 <script>
 import {
   fetchList,
-} from "@/api/bmsTicketLog";
+} from "@/api/memberTradingAddress";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
@@ -63,7 +88,7 @@ const defaultListQuery = {
   pageSize: 10,
   keyword: null,
 };
-const defaultTicket = {
+const defaultMember = {
   id: null,
   // username: null,
   // password: null,
@@ -73,7 +98,7 @@ const defaultTicket = {
   // status: 1,
 };
 export default {
-  name: "ticketList",
+  name: "memberList",
   data() {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -81,7 +106,7 @@ export default {
       total: null,
       listLoading: false,
       dialogVisible: false,
-      ticket: Object.assign({}, defaultTicket),
+      member: Object.assign({}, defaultMember),
       isEdit: false,
     };
   },
@@ -113,6 +138,9 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageNum = val;
       this.getList();
+    },
+    lookDetail(index, row) {
+      this.$router.push({ path: "/mms/memberDetail", query: { id: row.id } });
     },
     getList() {
       this.listLoading = true;

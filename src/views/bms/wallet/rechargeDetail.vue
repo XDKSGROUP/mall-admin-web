@@ -19,9 +19,6 @@
           <el-form-item label="账号ID：">
             <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
-          
-
-       
         </el-form>
       </div>
     </el-card>
@@ -36,31 +33,22 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
+        <el-table-column label="充值单号" align="center">
+          <template slot-scope="scope">{{scope.row.rechargeNumber}}</template>
+        </el-table-column>
         <el-table-column label="帐号ID" align="center">
           <template slot-scope="scope">{{scope.row.memberId}}</template>
         </el-table-column>
-        <el-table-column label="币种" align="center">
-          <template slot-scope="scope">{{scope.row.currency}}</template>
+        <el-table-column label="充值时间" width="160" align="center">
+          <template slot-scope="scope">{{scope.row.rechargeTime | formatDateTime}}</template>
         </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tradingAddress}}</template>
+        <el-table-column label="充值数量" align="center">
+          <template slot-scope="scope">{{scope.row.number}}</template>
         </el-table-column>
-        <el-table-column label="代币" align="center">
-          <template slot-scope="scope">{{scope.row.tokenCurrency}}</template>
-        </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tokenTradingAddress}}</template>
-        </el-table-column>
-
-        <el-table-column label="添加时间" width="160" align="center">
-          <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
+        <el-table-column label="交易记录ID" align="center">
+          <template slot-scope="scope">{{scope.row.transactionId}}</template>
         </el-table-column>
        
-        <el-table-column label="操作" width="180" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">查看</el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </div>
     <div class="pagination-container">
@@ -80,7 +68,7 @@
 <script>
 import {
   fetchList,
-} from "@/api/memberTradingAddress";
+} from "@/api/bmsRechargeDetail";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
@@ -139,9 +127,7 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
-    lookDetail(index, row) {
-      this.$router.push({ path: "/mms/memberDetail", query: { id: row.id } });
-    },
+    
     getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {

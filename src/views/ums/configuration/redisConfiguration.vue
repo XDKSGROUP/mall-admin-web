@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="filter-container" shadow="never">
+    <!-- <el-card class="filter-container" shadow="never">
       <div>
         <i class="el-icon-search"></i>
         <span>筛选搜索</span>
@@ -13,32 +13,41 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+          <el-form-item label="币种：">
+            <el-input v-model="listQuery.currency" class="input-width" placeholder="币种" clearable></el-input>
+          </el-form-item>
           <el-form-item label="账号ID：">
             <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
+          
+
+       
         </el-form>
       </div>
-    </el-card>
+    </el-card> -->
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
       
     </el-card>
     <div class="table-container">
-      <el-table ref="ticketTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
+      <el-table ref="memberTable" :data="peopleArray" style="width: 100%;" v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.id}}</template>
+        <el-table-column label="编号" width="300" align="center">
+          <template slot-scope="scope">{{scope.row.nickname}}</template>
         </el-table-column>
         <el-table-column label="帐号ID" align="center">
-          <template slot-scope="scope">{{scope.row.memberId}}</template>
+          <template slot-scope="scope">{{scope.row.realName}}</template>
         </el-table-column>
-        <el-table-column label="添加时间" width="160" align="center">
-          <template slot-scope="scope">{{scope.row.addtime | formatDateTime}}</template>
+       
+        <el-table-column label="操作" width="180" align="center">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">修改</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
-    <div class="pagination-container">
+    <!-- <div class="pagination-container">
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -49,13 +58,13 @@
         :page-sizes="[10,15,20]"
         :total="total"
       ></el-pagination>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
 import {
   fetchList,
-} from "@/api/bmsTicketLog";
+} from "@/api/redisConfiguration";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
@@ -63,7 +72,7 @@ const defaultListQuery = {
   pageSize: 10,
   keyword: null,
 };
-const defaultTicket = {
+const defaultMember = {
   id: null,
   // username: null,
   // password: null,
@@ -73,7 +82,7 @@ const defaultTicket = {
   // status: 1,
 };
 export default {
-  name: "ticketList",
+  name: "memberList",
   data() {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -81,8 +90,10 @@ export default {
       total: null,
       listLoading: false,
       dialogVisible: false,
-      ticket: Object.assign({}, defaultTicket),
+      member: Object.assign({}, defaultMember),
       isEdit: false,
+      obj: {},
+      peopleArray: []
     };
   },
   created() {
@@ -114,12 +125,24 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
+    lookDetail(index, row) {
+      this.$router.push({ path: "/mms/memberDetail", query: { id: row.id } });
+    },
     getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {
+        this.list = response.data[0]
+        this.obj = Object.keys(response.data[0])
+        // let peopleArray = []
+        for(let i in this.list){
+          var obj={
+          nickname:i,
+          realName:this.list[i]
+          }
+          this.peopleArray.push(obj)
+          }
         this.listLoading = false;
-        this.list = response.data.list;
-        this.total = response.data.total;
+        // this.total = response.data.total;
       });
     },
   },

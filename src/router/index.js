@@ -377,7 +377,19 @@ export const asyncRouterMap = [
         component: () => import('@/views/ums/resource/categoryList'),
         meta: {title: '资源分类'},
         hidden: true
-      }
+      },
+      {
+        path: 'redisConfiguration',
+        name: 'redisConfiguration',
+        component: () => import('@/views/ums/configuration/redisConfiguration'),
+        meta: {title: 'redis配置', icon: 'ums-resource'}
+      },
+      {
+        path: 'redisMotifyLog',
+        name: 'redisMotifyLog',
+        component: () => import('@/views/ums/configuration/umsRedisMotifyLog'),
+        meta: {title: 'redis修改记录', icon: 'ums-resource'}
+      },
     ]
   },
   {
