@@ -13,11 +13,8 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="币种：">
-            <el-input v-model="listQuery.currency" class="input-width" placeholder="币种" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="账号ID：">
-            <el-input v-model="listQuery.memberId" class="input-width" placeholder="账号ID" clearable></el-input>
+          <el-form-item label="操作人ID：">
+            <el-input v-model="listQuery.adminId" class="input-width" placeholder="账号ID" clearable></el-input>
           </el-form-item>
           
 
@@ -36,30 +33,20 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="帐号ID" align="center">
-          <template slot-scope="scope">{{scope.row.memberId}}</template>
+        <el-table-column label="key" align="center">
+          <template slot-scope="scope">{{scope.row.keyName}}</template>
         </el-table-column>
-        <el-table-column label="币种" align="center">
-          <template slot-scope="scope">{{scope.row.currency}}</template>
+        <el-table-column label="变更前value" align="center">
+          <template slot-scope="scope">{{scope.row.valueBefore}}</template>
         </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tradingAddress}}</template>
+        <el-table-column label="变更后value" align="center">
+          <template slot-scope="scope">{{scope.row.valueAfter}}</template>
         </el-table-column>
-        <el-table-column label="代币" align="center">
-          <template slot-scope="scope">{{scope.row.tokenCurrency}}</template>
+        <el-table-column label="操作人ID" align="center">
+          <template slot-scope="scope">{{scope.row.adminId}}</template>
         </el-table-column>
-        <el-table-column label="交易地址" align="center">
-          <template slot-scope="scope">{{scope.row.tokenTradingAddress}}</template>
-        </el-table-column>
-
-        <el-table-column label="添加时间" width="160" align="center">
-          <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
-        </el-table-column>
-       
-        <el-table-column label="操作" width="180" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="lookDetail(scope.$index, scope.row)">查看</el-button>
-          </template>
+        <el-table-column label="变更时间" align="center">
+          <template slot-scope="scope">{{scope.row.motifyTime}}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -80,13 +67,12 @@
 <script>
 import {
   fetchList,
-} from "@/api/memberTradingAddress";
+} from "@/api/umsRedisMotifyLog";
 import { formatDate } from "@/utils/date";
 
 const defaultListQuery = {
   pageNum: 1,
-  pageSize: 10,
-  keyword: null,
+  pageSize: 10
 };
 const defaultMember = {
   id: null,
@@ -139,9 +125,7 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
-    lookDetail(index, row) {
-      this.$router.push({ path: "/mms/memberDetail", query: { id: row.id } });
-    },
+    
     getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {

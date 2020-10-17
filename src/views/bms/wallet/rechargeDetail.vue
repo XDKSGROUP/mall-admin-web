@@ -64,7 +64,7 @@
       ></el-pagination>
     </div>
   <el-dialog
-      :title="isEdit?'编辑用户':'添加用户'"
+      :title="isEdit?'编辑充值':'添加充值'"
       :visible.sync="dialogVisible"
       width="40%">
       <el-form :model="member"

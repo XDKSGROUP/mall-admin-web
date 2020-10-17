@@ -6,3 +6,11 @@ export function fetchList(params) {
         params: params
     })
 }
+
+export function updateRedis(params) {
+    return request({
+      url:'/RedisChanges/upRedis',
+      method:'post',
+      params:params
+    })
+  }
