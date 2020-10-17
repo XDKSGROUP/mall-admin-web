@@ -25,7 +25,7 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      
+      <el-button size="mini" class="btn-add" @click="handleAdd()" style="margin-left: 20px">添加</el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="memberTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
@@ -63,11 +63,31 @@
         :total="total"
       ></el-pagination>
     </div>
+  <el-dialog
+      :title="isEdit?'编辑用户':'添加用户'"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <el-form :model="member"
+               ref="adminForm"
+               label-width="150px" size="small">
+        <el-form-item label="会员ID：">
+          <el-input v-model="member.memberId" style="width: 250px"></el-input>
+        </el-form-item>
+        <el-form-item label="充值数量：">
+          <el-input v-model="member.number" style="width: 250px"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="handleDialogConfirm()" size="small">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 <script>
 import {
-  fetchList,
+  fetchList,addRechargeDetail
 } from "@/api/bmsRechargeDetail";
 import { formatDate } from "@/utils/date";
 
@@ -78,7 +98,13 @@ const defaultListQuery = {
 };
 const defaultMember = {
   id: null,
-  // username: null,
+  rechargeTime: null,
+  number:null,
+  rechargeNumber:null,
+  memberId: null,
+  transactionId:null,
+  handlers:null,
+  rechargeType:null
   // password: null,
   // nickName: null,
   // email: null,
@@ -136,6 +162,37 @@ export default {
         this.total = response.data.total;
       });
     },
+    handleAdd() {
+        this.dialogVisible = true;
+        this.isEdit = false;
+        this.member = Object.assign({},defaultMember);
+      },
+      handleDialogConfirm() {
+        this.$confirm('是否要确认?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+        
+            
+        let params = new URLSearchParams();
+        params.append('memberId', this.member.memberId);
+        params.append('husdt', this.member.number);
+        addRechargeDetail(params).then(response=>{
+         
+          this.$message({
+                message: '添加成功！',
+                type: 'success'
+              });
+              this.dialogVisible =false;
+              this.getList();
+        });
+
+
+
+        })
+      },
+
   },
 };
 </script>
