@@ -462,6 +462,12 @@ export const asyncRouterMap = [
         name: 'ticketLog',
         component: () => import('@/views/bms/wallet/ticketLog'),
         meta: {title: '抢券记录', icon: 'ums-resource'}
+      },
+      {
+        path: 'applyCaptainLog',
+        name: 'applyCaptainLog',
+        component: () => import('@/views/bms/wallet/applyCaptainLog'),
+        meta: {title: '申请团队长记录', icon: 'product-attr'}
       }
     ]
   },
