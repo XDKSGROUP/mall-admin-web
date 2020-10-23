@@ -468,6 +468,18 @@ export const asyncRouterMap = [
         name: 'applyCaptainLog',
         component: () => import('@/views/bms/wallet/applyCaptainLog'),
         meta: {title: '申请团队长记录', icon: 'product-attr'}
+      },
+      {
+        path: 'miningMachinery',
+        name: 'miningMachinery',
+        component: () => import('@/views/bms/wallet/miningMachinery'),
+        meta: {title: '矿机列表', icon: 'product-attr'}
+      },
+      {
+        path: 'miningMachineryOrder',
+        name: 'miningMachineryOrder',
+        component: () => import('@/views/bms/wallet/miningMachineryOrder'),
+        meta: {title: '矿机订单列表', icon: 'product-attr'}
       }
     ]
   },
