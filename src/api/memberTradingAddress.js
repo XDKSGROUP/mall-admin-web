@@ -6,3 +6,17 @@ export function fetchList(params) {
         params: params
     })
 }
+export function getBalanceOen(params) {
+  return request({
+    url:'/eth/getBalanceOen/',
+    method:'get',
+    params:params
+  })
+}
+export function ethCallOne(params) {
+  return request({
+    url:'eth/ethCallOne/',
+    method:'get',
+    params:params
+  })
+}

@@ -1,61 +1,6 @@
 <template>
   <div class="app-container">
 
-    <el-dialog width="60%" :visible.sync="dialogFormVisible">
-      <div slot="title">用户ID:{{umsData.id}}</div>
-      <el-form>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <div>{{umsData.phone}}</div>
-        </el-form-item>
-        <el-form-item label="推荐人id" :label-width="formLabelWidth">
-          <div>{{umsData.referrer}}</div>
-        </el-form-item>
-        <el-form-item label="有效直推人数" :label-width="formLabelWidth">
-          <div>{{umsData.referrerCountValid}}</div>
-        </el-form-item>
-        <el-form-item label="添加时间" :label-width="formLabelWidth">
-          <div>{{umsData.createTime|formatDateTime}}</div>
-        </el-form-item>
-
-      </el-form>
-    </el-dialog>
-
-    <el-dialog width="30%" :visible.sync="dialogTableVisible">
-      <div slot="title">用户ID:{{umsData.id}}</div>
-      <el-form>
-        <el-form-item label="手机号：" :label-width="formLabelWidth">
-          <el-input v-model="umsData.phone" type="number" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="推荐人id" :label-width="formLabelWidth">
-          <div>{{umsData.referrer}}</div>
-        </el-form-item>
-        <el-form-item label="有效直推人数" :label-width="formLabelWidth">
-          <div>{{umsData.referrerCountValid}}</div>
-        </el-form-item>
-        <el-form-item label="添加时间" :label-width="formLabelWidth">
-          <div>{{umsData.createTime|formatDateTime}}</div>
-        </el-form-item>
-        <el-form-item label="团队等级" :label-width="formLabelWidth">
-        <template>
-          <el-select v-model="val" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </template>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogTableVisible = false">取 消</el-button>
-        <el-button type="primary" @click="upPhone()">确 定</el-button>
-      </div>
-    </el-dialog>
-
-
     <el-card class="filter-container" shadow="never">
       <div>
         <i class="el-icon-search"></i>
@@ -68,13 +13,14 @@
         >重置</el-button>
       </div>
       <div style="margin-top: 15px">
-        <el-form :inline="true" :model="listQuery" size="small" label-width="100px">
-          <el-form-item label="用户编号：">
-            <el-input v-model="listQuery.memberId" class="input-width" placeholder="用户编号" clearable></el-input>
+        <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+          <el-form-item label="订单编号：">
+            <el-input v-model="listQuery.username" class="input-width" placeholder="帐号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="手机号码：">
+          <el-form-item label="运行状态：">
             <el-input v-model="listQuery.phone" class="input-width" placeholder="手机号码" clearable></el-input>
           </el-form-item>
+
           <el-form-item label="启用状态：">
             <el-select v-model="listQuery.status" class="input-width" placeholder="全部" clearable>
               <el-option
@@ -86,7 +32,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="注册时间：">
+          <el-form-item label="购买时间：">
             <el-date-picker
               class="input-width"
               v-model="listQuery.createTimeStart"
@@ -190,11 +136,13 @@
           ></el-input>
           </el-form-item>
         </el-form>
+
+
       </div>
     </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>数据列表</span>
+      <span>合约列表</span>
       <el-button
         size="mini"
         class="btn-add"
@@ -202,56 +150,47 @@
         style="margin-left: 20px"
       >批量重置登录密码</el-button>
       <!--      <el-button size="mini" class="btn-add" @click="sexportExcel" style="margin-left: 20px">导出</el-button>-->
-      <el-button size="mini" class="btn-add" @click="handleClick" style="margin-left: 20px">导出1</el-button>
+      <el-button size="mini" class="btn-add" @click="handleClick" style="margin-left: 20px">导出</el-button>
     </el-card>
     <div class="table-container">
       <el-table stripe ref="memberTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="90" align="center">
-          <template slot-scope="scope">{{scope.row.id}}</template>
+        <el-table-column label="订单编号" width="90" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="联系电话" align="center">
-          <template slot-scope="scope">{{scope.row.phone}}</template>
+        <el-table-column label="购买人Id" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="推荐人" align="center">
-          <template slot-scope="scope">{{scope.row.referrer}}</template>
+        <el-table-column label="购买型号" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="有效直推人数" align="center"width="110">
-          <template slot-scope="scope">{{scope.row.referrerCountValid}}</template>
-        </el-table-column>
-        <el-table-column label="USDT" align="center"width="110">
-          <template slot-scope="scope">{{scope.row.husdt}}</template>
-        </el-table-column>
-        <el-table-column label="GFC" align="center"width="110">
-          <template slot-scope="scope">{{scope.row.fhc}}</template>
+        <el-table-column label="购买价格" align="center"width="110">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
         <!--        <el-table-column label="网体人数" align="center">
                   <template slot-scope="scope">{{}}</template>
                 </el-table-column>-->
-        <el-table-column label="激活状态" align="center">
-          <template slot-scope="scope">{{scope.row.activatedState  | activatedStates}}</template>
+        <el-table-column label="日收益" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="团队等级" align="center">
-          <template slot-scope="scope">{{scope.row.communityLevel | communityLevels}}</template>
+        <el-table-column label="收益率" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="是否启用" width="140" align="center">
-          <template slot-scope="scope">
-            <el-switch
-              @change="handleStatusChangeOne(scope.row.id, scope.row.status)"
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.status"
-            ></el-switch>
-          </template>
+        <el-table-column label="合约收益" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="注册时间" width="160" align="center">
-          <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
+
+        <el-table-column label="购买时间" width="160" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="openExamine(scope.row.id,0)">查看</el-button>
-            <el-button size="mini" @click="openExamine(scope.row.id,1)">修改</el-button>
-          </template>
+        <el-table-column label="运行状态" width="160" align="center">
+          <template slot-scope="scope">{{}}</template>
+        </el-table-column>
+        <el-table-column label="结束时间" width="160" align="center">
+          <template slot-scope="scope">{{}}</template>
+        </el-table-column>
+        <el-table-column label="合约进程" width="160" align="center">
+          <template slot-scope="scope">{{}}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -296,7 +235,7 @@
     status: 1,
   };
   export default {
-    name: "memberList",
+    name: "memberRelation",
     data() {
       return {
         listQuery: Object.assign({}, defaultListQuery),
@@ -306,25 +245,6 @@
         dialogVisible: false,
         member: Object.assign({}, defaultMember),
         isEdit: false,
-        options: [{
-          value: '0',
-          label: '会员'
-        }, {
-          value: '1',
-          label: 'D1'
-        }, {
-          value: '2',
-          label: 'D2'
-        }, {
-          value: '3',
-          label: 'D3'
-        }, {
-          value: '4',
-          label: 'D4'
-        }, {
-          value: '5',
-          label: 'D5'
-        }],
         statusOptions: [
           {
             label: "禁用",
@@ -378,8 +298,7 @@
           desc: ''
         },
         formLabelWidth: '120px',
-        umsData:{},
-        val: ''
+        umsData:{}
       };
 
     },
@@ -394,7 +313,7 @@
         let date = new Date(time);
         return formatDate(date, "yyyy-MM-dd hh:mm:ss");
       },
-      activatedStates(val) {
+      promotionYields(val) {
         if (val == 0) {
           return val = '未激活'
         }
@@ -437,27 +356,25 @@
       openExamine(id,type){
         getMemberDetail(id).then(res => {
           if (res.code == 200) {
-            console.log(res.data)
+            console.log(res)
             this.umsData = res.data
             if(type==0) this.dialogFormVisible = true;
             if(type==1) this.dialogTableVisible=true;
-            let communityLevel = res.data.communityLevel
-            this.val = this.options[communityLevel].value
           }
         })
       },
-      upPhone(){
+      upPhone(id,phone){
         var myreg = /^[1][1,2,3,4,5,7,8,9][0-9]{9}$/
-        if (!myreg.test(this.umsData.phone)) {
+        if (!myreg.test(phone)) {
           return this.$message({
             type: "error",
             message: "请输入正确的手机号码!",
           });
         }
+
         let data = {
-          memberId:  this.umsData.id,
-          phone: this.umsData.phone,
-          communityLevel:this.val
+          memberId: id,
+          phone: phone
         }
         upPhone(data).then(res => {
           this.dialogTableVisible=false;
@@ -601,6 +518,12 @@
           });
       },
       handleStatusChangeOne(memberId, status) {
+        console.log(status)
+        /*      if(status==0)status=1;
+              else {
+                if(status==1)status=0;
+              }*/
+
         this.$confirm("是否要修改该状态?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -649,7 +572,6 @@
   /deep/.el-table {
     color: #595959;
   }
-
 
 </style>
 <style></style>

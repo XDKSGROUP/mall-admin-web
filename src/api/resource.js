@@ -8,6 +8,7 @@ export function fetchList(params) {
   })
 }
 
+
 export function createResource(data) {
   return request({
     url: '/resource/create',

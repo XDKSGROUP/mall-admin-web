@@ -32,9 +32,24 @@ export function getMemberDetail(id) {
     });
 }
 
-export function updateStatus( params) {
+export function updateStatus(data) {
     return request({
         url: '/umsMember/updateStatus/',
+        method: 'post',
+        params: params
+    })
+}
+
+export function upPhone(params) {
+    return request({
+        url: '/umsMember/upPhone/',
+        method: 'post',
+        params: params
+    })
+}
+export function updateStatusOne(params) {
+    return request({
+        url: '/umsMember/updateStatusOne/',
         method: 'post',
         params: params
     })
