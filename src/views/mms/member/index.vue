@@ -4,19 +4,30 @@
     <el-dialog width="60%" :visible.sync="dialogFormVisible">
       <div slot="title">用户ID:{{umsData.id}}</div>
       <el-form>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
+        <el-form-item label="联系电话:" :label-width="formLabelWidth">
           <div>{{umsData.phone}}</div>
         </el-form-item>
-        <el-form-item label="推荐人id" :label-width="formLabelWidth">
+        <el-form-item label="推荐人id:" :label-width="formLabelWidth">
           <div>{{umsData.referrer}}</div>
         </el-form-item>
-        <el-form-item label="有效直推人数" :label-width="formLabelWidth">
+        <el-form-item label="有效直推人数:" :label-width="formLabelWidth">
           <div>{{umsData.referrerCountValid}}</div>
         </el-form-item>
-        <el-form-item label="添加时间" :label-width="formLabelWidth">
+        <el-form-item label="添加时间:" :label-width="formLabelWidth">
           <div>{{umsData.createTime|formatDateTime}}</div>
         </el-form-item>
-
+        <el-form-item label="每日动态收益:" :label-width="formLabelWidth">
+          <div>{{umsData.teamEarningsDay}}</div>
+        </el-form-item>
+        <el-form-item label="累计动态收益:" :label-width="formLabelWidth">
+          <div>{{umsData.teamEarningsTotal}}</div>
+        </el-form-item>
+        <el-form-item label="每日直推收益:" :label-width="formLabelWidth">
+          <div>{{umsData.directYieldDay  }}</div>
+        </el-form-item>
+        <el-form-item label="累计直推收益:" :label-width="formLabelWidth">
+          <div>{{umsData.directYieldTotal   }}</div>
+        </el-form-item>
       </el-form>
     </el-dialog>
 

@@ -77,9 +77,6 @@
         <el-table-column label="购买价格" align="center"width="110">
           <template slot-scope="scope">{{scope.row.price }}</template>
         </el-table-column>
-        <!--        <el-table-column label="网体人数" align="center">
-                  <template slot-scope="scope">{{}}</template>
-                </el-table-column>-->
         <el-table-column label="日收益" align="center">
           <template slot-scope="scope">{{scope.row.outputDay|outputDays}}</template>
         </el-table-column>
@@ -103,7 +100,7 @@
           <template slot-scope="scope">{{scope.row.orderStopTime | formatDateTime2}}</template>
         </el-table-column>
         <el-table-column label="合约进程" width="160" align="center">
-          <template slot-scope="scope">{{RunCycle(scope.row.creatTime,scope.row.runCycle )}}</template>
+          <template slot-scope="scope">{{scope.row.day}}/{{scope.row.runCycle}}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -161,8 +158,15 @@
       this.getList();
     },
     methods: {
-      RunCycle(time,runCycle){
-        return this.getTimes(time)+"/"+runCycle
+      RunCycle(time,runCycle,grantStatus,orderStopTime){
+
+          console.log(time)
+        console.log(time.split('T'))
+        let times=time.split('T')[0]
+        let orderStopTimes=orderStopTime.split('T')[0]
+
+          return this.getTimes(times,orderStopTimes,grantStatus)
+
       },
       handleSizeChange(val) {
         this.listQuery.pageNum = 1;
@@ -206,16 +210,30 @@
 
         }
         BmsMiningMachineryOrderDetailList(data).then((response) => {
+          response.data.list.map(item => {
+            if (item.grantStatus == 0) {
+              item.day = this.getTimes(item.creatTime, item.grantStatus)
+            } else if (item.grantStatus == 1) {
+              item.day = this.getTimes(item.creatTime,item.grantStatus, item.orderStopTime)
+            }
+          })
           this.listLoading = false;
           this.list = response.data.list;
           this.total = response.data.total;
         });
       },
-      getTimes (time) {
-        var BirthDay = new Date(time);
-        var today = new Date();
+
+      getTimes (time,grantStatus, timer) {
+
+        var BirthDay = new Date(time.split('T')[0]);
+        if (grantStatus == 0) {
+          var today = new Date();
+        } else if (grantStatus == 1) {
+          var today = new Date(timer.split('T')[0]);
+        }
         var timeold = (today.getTime() - BirthDay.getTime());
         var sectimeold = timeold / 1000
+        var secondsold = Math.floor(sectimeold);
         var msPerDay = 24 * 60 * 60 * 1000
         var e_daysold = timeold / msPerDay
         var daysold = Math.floor(e_daysold);
@@ -224,7 +242,7 @@
         var e_minsold = (e_hrsold - hrsold) * 60;
         var minsold = Math.floor((e_hrsold - hrsold) * 60);
         var seconds = Math.floor((e_minsold - minsold) * 60);
-
+        var span_dt_dt = daysold + " 天 " + hrsold + " 小时 " + minsold + " 分 " + seconds + " 秒了";
         if (daysold == -1) {
           daysold = 0
         }

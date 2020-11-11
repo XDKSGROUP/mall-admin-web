@@ -25,7 +25,7 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <el-button size="mini" class="btn-add" @click="handleAdd()" style="margin-left: 20px">添加</el-button>
+      <el-button size="mini" class="btn-add" @click="handleAdd()" style="margin-left: 20px">充值</el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="memberTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
@@ -33,9 +33,9 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="充值单号" align="center">
+<!--        <el-table-column label="充值单号" align="center">
           <template slot-scope="scope">{{scope.row.rechargeNumber}}</template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="帐号ID" align="center">
           <template slot-scope="scope">{{scope.row.memberId}}</template>
         </el-table-column>
@@ -48,7 +48,8 @@
         <el-table-column label="交易记录ID" align="center">
           <template slot-scope="scope">{{scope.row.transactionId}}</template>
         </el-table-column>
-       
+
+
       </el-table>
     </div>
     <div class="pagination-container">
@@ -153,7 +154,7 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
-    
+
     getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {
@@ -173,23 +174,20 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-        
-            
+            this.dialogVisible = false;
         let params = new URLSearchParams();
         params.append('memberId', this.member.memberId);
         params.append('husdt', this.member.number);
         addRechargeDetail(params).then(response=>{
-         
           this.$message({
-                message: '添加成功！',
+                message: '充值成功！',
                 type: 'success'
               });
-              this.dialogVisible =false;
               this.getList();
         });
-
-
-
+        }
+        ).catch(() => {
+          this.dialogVisible = false;
         })
       },
 
