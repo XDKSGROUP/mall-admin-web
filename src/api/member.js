@@ -54,3 +54,46 @@ export function updateStatusOne(params) {
         params: params
     })
 }
+export function getMemberActivate(params) {
+    return request({
+        url: '/umsMember/getMemberActivate',
+        method: 'get',
+        params: params
+    })
+}
+export function getMemberClass(params) {
+    return request({
+        url: '/umsMember/getMemberClass',
+        method: 'get',
+        params: params
+    })
+}
+export function getMemberIncomeAndExpenses(params) {
+    return request({
+        url: '/umsMember/getMemberIncomeAndExpenses',
+        method: 'get',
+        params: params
+    })
+}
+export function getMemberNewlyIncreased(params) {
+    return request({
+        url: '/umsMember/getMemberNewlyIncreased',
+        method: 'get',
+        params: params
+    })
+}
+
+export function getMillIncomeAndExpenses(params) {
+    return request({
+        url: '/umsMember/getMillIncomeAndExpenses',
+        method: 'get',
+        params: params
+    })
+}
+export function getMemberIncome(params) {
+    return request({
+        url: '/umsMember/getMemberIncome',
+        method: 'get',
+        params: params
+    })
+}

@@ -430,6 +430,18 @@ export const asyncRouterMap = [
         component: () => import('@/views/mms/member/memberMiningMachineryOrderDetailListOrder'),
         meta: {title: '会员合约矿机列表', icon: 'product-list'}
       },
+      {
+        path: 'memverChart',
+        name: 'memverChart',
+        component: () => import('@/views/mms/member/memverChart'),
+        meta: {title: '会员图表', icon: 'product-list'}
+      },
+      {
+        path: 'millClassChart',
+        name: 'millClassChart',
+        component: () => import('@/views/mms/member/millClassChart'),
+        meta: {title: '矿机等级', icon: 'product-list'}
+      },
     ]
   },
   {

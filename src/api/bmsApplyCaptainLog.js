@@ -22,3 +22,17 @@ export function disagreeApply(id, params) {
         params: params
     })
 }
+export function getRelationList(params) {
+  return request({
+    url: '/BmsMemberRelation/list',
+    method: 'get',
+    params: params
+  })
+}
+export function getRelationListOne(params) {
+  return request({
+    url: '/BmsMemberRelation/listOne',
+    method: 'get',
+    params: params
+  })
+}
